@@ -1,0 +1,5 @@
+# Ignore nodemon.json file
+nodemon.json
+
+# Ignore node_modules directory
+node_modules/
