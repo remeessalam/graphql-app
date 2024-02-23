@@ -1,8 +1,11 @@
-import React from "react";
+import { createContext } from "react";
 
-export default React.createContext({
-  token: null,
-  userId: null,
-  login: (token, userId, tokenExpiration) => {},
-  logout: () => {},
-});
+const AuthContext = createContext();
+export default AuthContext;
+
+// {
+//   token: null,
+//   userId: null,
+//   login: (token, userId, tokenExpiration) => {},
+//   logout: () => {},
+// }

@@ -1,13 +1,16 @@
 import { useContext, useState } from "react";
 import "./Auth.css";
 import AuthContext from "../context/auth-context";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const AuthPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
-
-  const contextType = useContext(AuthContext);
+  // const [error, setError] = useState("");
+  const login = useContext(AuthContext);
+  const navigate = useNavigate();
+  console.log(login, "thisis context type");
   const submitHandler = (event) => {
     event.preventDefault();
     if (email.trim().length === 0 || password.trim().length === 1) {
@@ -26,7 +29,7 @@ const AuthPage = () => {
       }
       `,
     };
-    if (!isLogin) {
+    if (isLogin) {
       requestBody = {
         query: `
           mutation{
@@ -51,19 +54,32 @@ const AuthPage = () => {
         return res.json();
       })
       .then((res) => {
-        console.log("This is response after login or signup :", res);
+        console.log(
+          "This is response after login or signup :",
+          res.data.login.token ? "true" : "false",
+          AuthContext
+        );
         if (res.data.login.token) {
-          contextType.login(
+          login(
             res.data.login.token,
             res.data.login.userId,
             res.data.login.tokenExpiration
           );
-          redirect("/");
+          console.log("This is response after login or signup :", AuthContext);
+          navigate("/");
+        } else {
+          console.log("This is response after login or signup :");
+          alert("Signup success");
+          // if (res.data.createUser.email) {
+          //   return;
+          // }
         }
       })
       .catch((err) => {
         console.log(err);
-        throw new Error("failed");
+        // setError(err);
+
+        // throw new Error("failed");
       });
   };
 
@@ -94,7 +110,7 @@ const AuthPage = () => {
         <div className="form-actions">
           <button type="submit">Submit</button>
           <button type="button" onClick={switchModelHandler}>
-            Switch to {isLogin ? "Signup" : "Login"}
+            Switch to {!isLogin ? "Signup" : "Login"}
           </button>
         </div>
       </form>

@@ -23,7 +23,7 @@ const MainNavigation = () => {
                   </li>
                 )}
                 <li>
-                  <NavLink to="/events">Events</NavLink>
+                  <NavLink to="/">Events</NavLink>
                 </li>
                 {context.token && (
                   <>
